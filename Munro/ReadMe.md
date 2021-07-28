@@ -3,6 +3,10 @@ I recommend running in terminal.
 
 I enjoy climbing mountains and figured it would be fun to vaguely find nearby Munros to me.
 
+TO RUN:
+1. Download the whole file
+2. Run the "Munros.py" file (preferably in a terminal)
+
 IMPORTANT TO NOTE:
   - The locations are only of major areas (primarily cities)
   - The distance is haversine distance:
