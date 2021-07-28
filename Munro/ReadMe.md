@@ -25,3 +25,8 @@ Everyone is more than welcome to:
 
 If you want to contact me quickly, my email is:
 samuel.jackson.scotland2@gmail.com
+
+
+VERSION:
+1.0 - 28/07/21:
+  - Made first commit and uploaded.
