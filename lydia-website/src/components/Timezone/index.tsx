@@ -11,7 +11,10 @@ type Props = {
 const Timezone : React.FC<Props> = ({
     timeZone,
 }) => {
-    const [time, setTime] = useState<Date>(new Date()); 
+
+    const [time, setTime] = useState<string>(
+        new Date().toLocaleTimeString("en-GB", {timeZone})
+    );
 
     const refreshClock = () => {
         handleTimeZone(Date(), timeZone);
@@ -24,7 +27,7 @@ const Timezone : React.FC<Props> = ({
             }),
         );
 
-        setTime(newTime);
+        setTime(newTime.toLocaleTimeString());
     }
 
     useEffect(() => {
@@ -37,7 +40,7 @@ const Timezone : React.FC<Props> = ({
 
     return (
         <div className="timezone-container">
-            {time.toLocaleTimeString()}
+            {time}
         </div>
     )
 }

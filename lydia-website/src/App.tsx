@@ -10,13 +10,16 @@ type Props = {
 const App : React.FC<Props> = ({
 
 }) => {
-  const tzid = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const londonTimezone = 'Europe/London';
+  const vancouverTimezone = 'America/Vancouver';
 
   return (
     <div className="app-container">
-      Hello World!
       <Timezone 
-        timeZone={tzid}
+        timeZone={londonTimezone}
+      />
+      <Timezone 
+        timeZone={vancouverTimezone}
       />
     </div>
   )
