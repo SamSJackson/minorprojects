@@ -1,27 +1,31 @@
-import React from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 import './App.scss';
 
 import Timezone from './components/Timezone';
+import Status from './constants/Status';
 
-type Props = {
+const StatusContext = createContext<Status[]>([]);
 
-};
-
-const App : React.FC<Props> = ({
-
-}) => {
+const App : React.FC = () => {
   const londonTimezone = 'Europe/London';
   const vancouverTimezone = 'America/Vancouver';
+  const [status, setStatus] = useState<Status[]>([]);
+
+  useEffect(() => {
+    setStatus([]);
+  }, []);
 
   return (
-    <div className="app-container">
-      <Timezone 
-        timeZone={londonTimezone}
-      />
-      <Timezone 
-        timeZone={vancouverTimezone}
-      />
-    </div>
+    <StatusContext.Provider value={status}>
+      <div className="app-container">
+        <Timezone 
+          timeZone={londonTimezone}
+        />
+        <Timezone 
+          timeZone={vancouverTimezone}
+        />
+      </div>
+    </StatusContext.Provider>
   )
 };
 
