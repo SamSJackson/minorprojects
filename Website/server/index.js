@@ -15,13 +15,37 @@ app.use(cors());
 app.use(parser.urlencoded({extended: true}));
 app.use(express.json());
 
-app.get('/api/statuses', (req, res) => {
+app.get('/api/statuses', (request, response) => {
     const sqlQuery = "SELECT * FROM basic_status";
     db.query(sqlQuery, (error, result) => {
         if (error) {
-            res.send(`error => ${error}`);
+            response.send(`error => ${error}`);
         }
-        res.send(result);
+        response.send(result);
+    })
+})
+
+app.post('/api/statuses/add', (request, response) => {
+    const text = request.body.text;
+    const author = request.body.author;
+    const createdAt = request.body.createdAt;
+    const createdWhere = request.body.country;
+    const newStatus = {
+        _id: 1,
+        text,
+        author,
+        createdAt,
+        createdWhere,
+    };
+
+    const sqlQuery = "INSERT INTO basic_status (text, author, createdAt, createdWhere) VALUES (?, ?, ?, ?)";
+    db.query(sqlQuery, [text, author, createdAt, createdWhere], (error, result) => {
+        if (error) {
+            console.log(error);
+            response.send({_id:0, text: "", author: "", createdAt: new Date(), createdWhere: ""});
+            return;
+        }
+        response.send(newStatus);
     })
 })
 

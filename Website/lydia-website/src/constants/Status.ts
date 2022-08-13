@@ -6,4 +6,4 @@ type Status = {
     createdWhere?: string;
 }
 
-export default Status;
+export type { Status };

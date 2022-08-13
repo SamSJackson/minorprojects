@@ -1,0 +1,14 @@
+.updates-container {
+    position: relative;
+    text-align: center;
+    height: 100%;
+    width: 60%;
+    background-color: #B0B3B8;
+    border: 2px solid #82817D;
+    border-radius: 10px;
+
+    .updates-container-statuses {
+        height: 90%;
+        overflow-y: scroll;
+    }
+}

@@ -28,7 +28,7 @@ const Timezone : React.FC<Props> = ({
     });
 
     return (
-        <div className="timezone-container">
+        <div className="timezone-container-display">
             {time}
         </div>
     )
