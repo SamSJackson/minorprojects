@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 import Timezone from './components/Timezone';
@@ -53,6 +53,7 @@ const App : React.FC = () => {
   return (
     <StatusContext.Provider value={status}>
       <div className="app-container">
+        Bit of text here
         <Timezone 
           timeZone={londonTimezone}
         />

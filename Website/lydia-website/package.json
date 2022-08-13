@@ -1,6 +1,8 @@
 {
   "name": "lydia-website",
   "version": "0.1.0",
+  "homepage": ".",
+  "proxy": "http://localhost:3000",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",

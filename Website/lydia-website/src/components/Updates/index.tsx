@@ -3,6 +3,7 @@ import React, { useContext } from 'react';
 import StatusContext from '../../config/StatusContext';
 
 import UpdateOption from './UpdateOption'; 
+import UpdateSubmit from './UpdateSubmit';
 
 type Props = {
     
@@ -13,6 +14,12 @@ const Updates : React.FC<Props> = ({
 }) => {
     const statusContext = useContext(StatusContext);
     const statusArray = statusContext.statusArray;
+    const addStatus = statusContext.addStatus;
+
+    const handleSubmit = (event: React.FormEvent) => {
+        console.log(`${event} has started`);
+        event.preventDefault();
+    }
 
     return (
         <>
@@ -21,6 +28,9 @@ const Updates : React.FC<Props> = ({
                     {...status}
                 />
             ))}
+            <UpdateSubmit 
+                onSubmit={handleSubmit}
+             />
         </>
     );
 };
