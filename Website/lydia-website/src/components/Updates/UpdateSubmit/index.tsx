@@ -11,11 +11,20 @@ const UpdateSubmit: React.FC<Props> = ({
 }) => {
 
     return (
-        <div className="footer">
+        <div className="updates-footer">
             <form onSubmit={onSubmit}>
-                <input type="text" id="text" name="text" />
-                <input type="text" id="author" name="author" />
+            <div className="updates-footer-flex">
+                <div className="updates-footer-flex-row">
+                    <input type="text" id="author" name="author" placeholder="Name" />
+                </div>
+                <hr className="updates-footer-divider" />
+                <div className="updates-footer-flex-row">
+                    <div className="textarea" contentEditable="true" data-ph="What's going on"/>
+                </div>
+            </div>
+            <div className="updates-footer-submit">
                 <input type="submit" value="Submit" />
+            </div>
             </form>
         </div>
     );

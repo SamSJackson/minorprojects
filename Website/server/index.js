@@ -26,20 +26,21 @@ app.get('/api/statuses', (request, response) => {
 })
 
 app.post('/api/statuses/add', (request, response) => {
+    const _id = request.body.id;
     const text = request.body.text;
     const author = request.body.author;
     const createdAt = request.body.createdAt;
     const createdWhere = request.body.country;
     const newStatus = {
-        _id: 1,
+        _id,
         text,
         author,
         createdAt,
         createdWhere,
     };
 
-    const sqlQuery = "INSERT INTO basic_status (text, author, createdAt, createdWhere) VALUES (?, ?, ?, ?)";
-    db.query(sqlQuery, [text, author, createdAt, createdWhere], (error, result) => {
+    const sqlQuery = "INSERT INTO basic_status (id, text, author, createdAt, createdWhere) VALUES (?, ?, ?, ?, ?)";
+    db.query(sqlQuery, [_id, text, author, createdAt, createdWhere], (error, result) => {
         if (error) {
             console.log(error);
             response.send({_id:0, text: "", author: "", createdAt: new Date(), createdWhere: ""});

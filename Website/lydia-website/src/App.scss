@@ -1,8 +1,24 @@
+$sand-img: url('static/images/sand.png');
+$sun-img: url('static/images/sun.png');
+
 .app-container {
     height: 100%;
-    background-color: #21E1E1;
+    background: rgb(0,170,208);
+    background-color: radial-gradient(circle, rgba(0,170,208,1) 45%, rgba(6,211,252,1) 100%);
 
 
+    background-image:
+      $sun-img,
+      $sand-img;
+    background-position:
+      top center,
+      bottom;
+    background-size:
+      200px,
+      contain;
+    background-repeat: no-repeat;
+    
+  
     .flex-grid {
       height: 100%;
       display: flex;
@@ -18,6 +34,12 @@
     @media (max-width: 400px) {
         .flex-grid {
           display: block;
+
+          .col {
+            height: 50%;
+            flex: 1;
+            margin: auto;
+          }
         }
       }
 

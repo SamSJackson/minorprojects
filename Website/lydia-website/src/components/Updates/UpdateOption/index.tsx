@@ -1,34 +1,36 @@
-import React from 'react'
+import React, { useState, useContext } from 'react';
+
+import { Status } from '../../../constants/Status';
+import TimeContext from '../../../contexts/TimeContex';
+import { formatTime } from '../../../util/time';
+
+import './main.scss';
 
 type Props = {
-    _id: number;
-    text: string;
-    author: string;
-    createdAt: Date;
-    createdWhere?: string;
+    status: Status,
+    onDelete: (status : number) => void,
 };
 
 const UpdateOption: React.FC<Props> = ({
-    _id,
-    text,
-    author,
-    createdAt,
-    createdWhere
+    status,
+    onDelete,
 }) => {
+    const createdAt = formatTime(status.createdAt);
+
     return (
         <div className="status-option">
-            <li>
-                {text}
-            </li>
-            <li>
-                {author}
-            </li>
-            <li>
-                {createdAt.toLocaleString()}
-            </li>
-            <li>
-                {createdWhere}
-            </li>
+            <div className="status-option-header">
+                <div>
+                    {status.author}     
+                </div>
+                <div>
+                    {createdAt}
+                </div>
+            </div>
+            <hr className="status-option-divider" />
+            <div className="status-option-body">
+                {status.text}
+            </div>
         </div>
     )
 }

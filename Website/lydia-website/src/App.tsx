@@ -4,7 +4,9 @@ import axios from 'axios';
 import Timezone from './components/Timezone';
 import Updates from './components/Updates';
 import { Status } from './constants/Status';
-import StatusContext, { StatusContextType } from './config/StatusContext';
+import StatusContext from './contexts/StatusContext';
+import TimeContext from './contexts/TimeContex';
+import { changeDateTimezone } from './util/time';
 
 import './App.scss';
 
@@ -14,13 +16,8 @@ const vancouverTimezone = 'America/Vancouver';
 
 
 const App : React.FC = () => {
-
-  
-  const [status, setStatus] = useState<StatusContextType>({
-    statusArray: [],
-    addStatus: (argument: Status) => {},
-    removeStatus: () => {},
-  });
+  const [status, setStatus] = useState<Status[]>([]);
+  const tzid = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   useEffect(() => {
     const url = BASE_URL + 'api/statuses';
@@ -28,46 +25,40 @@ const App : React.FC = () => {
       const receivedStatusArray: Status[] = [];
       for (var i = 0; i < response.data.length; i++) {
         const transformedStatus: Status = {
-          _id: response.data[i]._id,
+          _id: response.data[i].id,
           text: response.data[i].text,
           author: response.data[i].author,
-          createdAt: response.data[i].createdAt,
+          createdAt: changeDateTimezone(response.data[i].createdAt, tzid),
           createdWhere: response.data[i].createdWhere,
         };
         receivedStatusArray.push(transformedStatus);
       }
-      setStatus({
-        statusArray: receivedStatusArray,
-        addStatus: handleAddStatus,
-        removeStatus: handleRemoveStatus,
-      })
+      setStatus([...status, ...receivedStatusArray]);
     });
   }, []);
 
   const handleAddStatus = (newStatus: Status) => {
-    setStatus({
-      statusArray: status.statusArray.concat([newStatus]),
-      addStatus: status.addStatus,
-      removeStatus: status.removeStatus,
-    });
+    console.log(newStatus._id);
+    setStatus([...status, newStatus]);
   };
 
-  const handleRemoveStatus = () => {};
-
   return (
-    <StatusContext.Provider value={status}>
-      <div className="app-container">
-        <div className="flex-grid">
-          <div className="col">
-            <Timezone timeZone={londonTimezone} />
-            <Timezone timeZone={vancouverTimezone} />
+    <TimeContext.Provider value={tzid} >
+      <StatusContext.Provider value={status}>
+        <div className="app-container">
+          <div className="flex-grid">
+            <div className="col">
+              <Timezone timeZone={londonTimezone} />
+              <Timezone timeZone={vancouverTimezone} />
+            </div>
+            <div className="col">
+              <Updates onSubmit={handleAddStatus} />
+            </div>
           </div>
-          <div className="col">
-            <Updates />
-          </div>
+          <div className="sand-container" />
         </div>
-      </div>
-    </StatusContext.Provider>
+      </StatusContext.Provider>
+    </TimeContext.Provider>
   )
 };
 

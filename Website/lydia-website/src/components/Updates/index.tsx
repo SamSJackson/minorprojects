@@ -4,41 +4,39 @@ import axios from 'axios';
 import UpdateOption from './UpdateOption'; 
 import UpdateSubmit from './UpdateSubmit';
 
-import StatusContext from '../../config/StatusContext';
+import StatusContext from '../../contexts/StatusContext';
 import { Status } from '../../constants/Status';
+import { parseDateToISO } from '../../util/time';
+import { generateID } from '../../util/guid';
+
 import './main.scss';
 
 const BASE_URL = "http://localhost:3001";
 const ct = require('countries-and-timezones');
 
 type Props = {
-    
+    onSubmit: (status: Status) => void;
 }
 
 const Updates : React.FC<Props> = ({
-
+    onSubmit,
 }) => {
-
-    const statusContext = useContext(StatusContext);
-    const statusArray = statusContext.statusArray;
-    const addStatus = statusContext.addStatus;
+    const statusArray = useContext(StatusContext);
     const tzid = Intl.DateTimeFormat().resolvedOptions().timeZone;
     const country = ct.getCountriesForTimezone(tzid)[0].name;
 
 
     const handleSubmit = async (event: React.SyntheticEvent) => {
         const target = event.target as typeof event.target & {
-            text: { value: string};
-            author: { value: string};
+            text: { value: string };
+            author: { value: string };
         };
-        const text = target.text.value;
-        const author = target.author.value;
-        const createdAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
         const url = BASE_URL + "/api/statuses/add";
         axios.post(url, {
-            text: text, 
-            author: author, 
-            createdAt: createdAt, 
+            id: generateID(),
+            text: target.text.value, 
+            author: target.author.value, 
+            createdAt: parseDateToISO(tzid).slice(0, 19).replace('T', ' '), 
             country: country,
         }).then((response) => {
             const newStatus: Status = {
@@ -48,13 +46,15 @@ const Updates : React.FC<Props> = ({
                 createdAt: new Date(response.data.createdAt),
                 createdWhere: response.data.createdWhere,
             };
-            addStatus(newStatus);
+            onSubmit(newStatus);
         }).catch((error) => {
-        })
-
+});
 
         event.preventDefault();
     }
+
+    const handleDelete = (statusId : number) => {
+    };
 
     return (
         <div className="updates-container">
@@ -62,7 +62,8 @@ const Updates : React.FC<Props> = ({
                 {statusArray.map((status) => (
                     <UpdateOption
                         key={status._id}
-                        {...status}
+                        status={status}
+                        onDelete={handleDelete}
                     />
                 ))}
             </div>
