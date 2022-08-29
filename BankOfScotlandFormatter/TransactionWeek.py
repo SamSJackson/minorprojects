@@ -4,7 +4,8 @@ class TransactionWeek:
 
 	def __init__(self, transactions):
 		self._transactions = transactions
-		self._income_total, self._outgoing_total = self.get_transaction_sum()
+		self._income_total = self._get_transaction_sum_incoming()
+		self._outgoing_total = self._get_transaction_sum_outgoing()
 
 	def _same_week(self, date2):
 		first_date = self._transactions[0].date
@@ -25,19 +26,25 @@ class TransactionWeek:
 		output += "]"
 		return output
 
-	def get_transaction_sum(self):
-		income_total, outgoing_total = 0, 0
+	def _get_transaction_sum_outgoing(self):
+		outgoing_total = 0
 		for transaction in self._transactions:
 			if transaction.from_account:
 				outgoing_total += transaction.amount
-			else:
+		return round(outgoing_total, 2)
+
+	def _get_transaction_sum_incoming(self):
+		income_total = 0
+		for transaction in self._transactions:
+			if not transaction.from_account:
 				income_total += transaction.amount
-		return tuple([round(income_total, 2), round(outgoing_total, 2)])
+		return round(income_total, 2)
 
 	def add_to_week(self, transaction):
 		if self._same_week(transaction.date):
 			self._transactions.append(transaction)
-		self._transactions_income_sum, self._transactions_outgoing_sum = self.get_transaction_sum()
+		self._income_total = self._get_transaction_sum_incoming()
+		self._outgoing_total = self._get_transaction_sum_outgoing()
 
 	def get_first_transaction_date(self):
 		return self._transactions[0].date

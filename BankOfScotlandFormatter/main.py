@@ -124,9 +124,7 @@ def add_mean_outgoing_to_sheet(sheet, transactions):
 
 def add_transaction_to_sheet(sheet, transaction):
 	row = sheet.max_row + 1
-	date = str(transaction.date)
-	date_day = transaction.date.strftime("%a")
-	date_cell = sheet.cell(row=row, column=1, value=f"{date_day} {date}")
+	date_cell = sheet.cell(row=row, column=1, value=f"{transaction.date.strftime('%a %d-%b-%y')}")
 	type_cell = sheet.cell(row=row, column=2, value=f"{transaction.transaction_type}")
 	info_cell = sheet.cell(row=row, column=3, value=f"{transaction.description}")
 	amount_cell = sheet.cell(row=row, column=4, value=transaction.amount)

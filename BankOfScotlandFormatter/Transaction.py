@@ -14,8 +14,15 @@ class Transaction:
 		dt = datetime.strptime(date, "%d/%m/%Y")
 		return dt.date()
 
-	def _clean_description(self, description):
-		return description
+	def _clean_description(self, description): 
+		split_description = description.split()
+		if "CD" in split_description:
+			cd_index = split_description.index("CD")
+			split_description = split_description[0:cd_index]
+		if (len(split_description)) >= 2:
+			split_description = split_description[0:2]
+		filtered_description = [word for word in split_description if len(word) < 10]
+		return " ".join(filtered_description)
 
 	def _get_amount(self, amount):
 		return amount[0] if self._from_account else amount[1]
@@ -48,7 +55,7 @@ class Transaction:
 	
 	@property
 	def description(self):
-		return self._description[0]
+		return self._description
 
 	@property
 	def balance(self):

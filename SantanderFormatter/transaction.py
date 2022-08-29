@@ -45,7 +45,7 @@ class Transaction:
 		return "Out" if self._is_from_account else "In"
 
 	def return_transaction_list(self):
-		return [str(self._date), self._info, self._other_party, self._amount, self._total_balance]
+		return [self._date, self._info, self._other_party, self._amount, self._total_balance]
 
 	def __str__(self):
 		return f"{self._date} | {self._info} | {self.in_or_out()} | {self._amount}"

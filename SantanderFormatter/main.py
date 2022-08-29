@@ -1,10 +1,14 @@
-import calendar, pendulum
+import calendar, pendulum, os, argparse
+
 from openpyxl import Workbook, load_workbook
 from openpyxl.styles import Font, Color, Alignment, Border, Side, PatternFill
 from openpyxl.formatting.rule import Rule
 from openpyxl.styles.differential import DifferentialStyle
 from openpyxl.utils import get_column_letter
+
 from datetime import datetime, date
+from xls2xlsx import XLS2XLSX
+
 from transaction import Transaction
 from transaction_week import TransactionWeek
 
@@ -61,9 +65,21 @@ def stretch_columns(formatted_sheet):
 	for col, value in dims.items():
 		formatted_sheet.column_dimensions[col].width = value + 3
 
+def repair_date(date):
+	wrong_source_format = '%Y-%d-%m'
+	dest_format = '%Y-%m-%d'
+	if (date.day <= 12):
+		strp_date = datetime.strptime(str(date), wrong_source_format)
+		# dt = datetime.combine(date, datetime.min.time())
+		date = strp_date.strftime(dest_format)
+		dt = datetime.strptime(date, dest_format)
+		date = dt.date()
+	return date
+
 def same_week(date1, date2):
-	return date1.isocalendar()[1] == date2.isocalendar()[1] \
+	is_same_week = date1.isocalendar()[1] == date2.isocalendar()[1] \
 					and date1.year == date2.year
+	return is_same_week
 
 def get_week_beginning(date):
 	datetime_instance = datetime.combine(date, datetime.min.time())
@@ -83,7 +99,9 @@ def add_week_beginning(sheet, date):
 def add_transactions_row(sheet, transaction):
 	transaction_list = transaction.return_transaction_list()
 	newest_row = sheet.max_row
-	date_cell = sheet.cell(row=newest_row+1, column=1, value=transaction_list[0])
+	date = str(transaction_list[0])
+	date_day = transaction_list[0].strftime("%a")
+	date_cell = sheet.cell(row=newest_row+1, column=1, value=f"{date_day} {date}")
 	info_cell = sheet.cell(row=newest_row+1, column=2, value=transaction_list[1])
 	other_party_cell = sheet.cell(row=newest_row+1, column=3, value=transaction_list[2])
 	amount_cell = sheet.cell(row=newest_row+1, column=4, value=transaction_list[3])
@@ -109,12 +127,12 @@ def parse_into_weeks(sheet):
 	if not (len(all_transactions)):
 		return
 
+	all_transactions[0][0].value = repair_date(datetime.date(all_transactions[0][0].value))
 	last_day = all_transactions[0][0].value
-	all_transactions[0][0].value = datetime.date(all_transactions[0][0].value)
 	parsed_weeks.append([list(all_transactions[0])])
 	for transaction in all_transactions[1:]:
+		transaction[0].value = repair_date(datetime.date(transaction[0].value))
 		date = transaction[0].value
-		transaction[0].value = datetime.date(transaction[0].value)
 		if (same_week(last_day, date)):
 			parsed_weeks[-1].append(list(transaction))
 		else:
@@ -175,7 +193,23 @@ def write_to_sheet(sheet, formatted_sheet, cleaned_weeks, weeks_sum):
 
 
 if __name__ == '__main__':
-	workbook = load_workbook(filename='Statements09012960416133.xlsx')
+	parser = argparse.ArgumentParser(description="Format transaction statements")
+	parser.add_argument('-f', '--filename', metavar='Filename', type=str, nargs='+',
+                    help='A filename for formatting xls transaction file')
+
+	args = parser.parse_args()
+	filename = vars(args)["filename"] if type(vars(args)["filename"]) == str else vars(args)["filename"][0]
+	filename = filename if filename.endswith('xls') else filename + ".xls"
+	filename_xlsx = filename + 'x'
+
+	if not (os.path.exists(filename)):
+		raise ValueError("File not found")
+
+	if not (os.path.exists(filename_xlsx)):
+		x2x = XLS2XLSX(filename)
+		x2x.to_xlsx(filename_xlsx)
+
+	workbook = load_workbook(filename_xlsx)
 	sheet = workbook.active
 
 	formatted_workbook = Workbook()
@@ -186,5 +220,5 @@ if __name__ == '__main__':
 	weeks_sum = sum_weeks(cleaned_weeks)
 	write_to_sheet(sheet, formatted_sheet, cleaned_weeks, weeks_sum)
 
-	formatted_workbook.save(filename=formatted_workbook_name)
+	formatted_workbook.save(os.getcwd() + '\\Formatted Statements\\' + formatted_workbook_name)
 
