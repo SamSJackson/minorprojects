@@ -1,44 +1,45 @@
 .updates-footer {
-    border: 2px solid #99a19a;
+    border: 1px solid black;
     border-radius: 5px;
     width: 100%;
     position: absolute;
     bottom: 0px;
-
-    .updates-footer-divider {
-        border: 1px solid #969b97e1;
-        margin: 0px;
-        width: 100%;
-        opacity: 0.6;
-    }
 
     .updates-footer-flex {
         display: flex;
         flex-direction: column;
         margin: auto;
         
-        .updates-footer-flex-row {
-            width: 100%;
+        .textarea { 
+            text-align: left;
+            width: 95%;
+            resize: none;
+            min-height: 50px;
+            height: auto;
+            background-color: inherit;
+            margin: auto 2px auto 2px;
+            border: none;
+        }
 
-            .textarea { 
-                text-align: left;
-                width: 95%;
-                min-height: 50px;
-                height: auto;
-                border: 2px solid #969b97e1;
-                margin-bottom: 2px;
-            }
-            
-            [contentEditable=true]:empty:not(:focus):before{
-                content:attr(data-ph);
-                color:grey;
-            }
+        .textarea:focus {
+            outline: none;
+        }
+        
+        [contentEditable=true]:empty:not(:focus):before{
+            content:attr(data-ph);
+            color:grey;
+        }
 
-            input {
-                float: left;
-                width: 80%;
-                background-color: #d5dfd7;
-            }
+        input {
+            float: left;
+            width: 95%;
+            background-color: #d5dfd7;
+            border-top: none;
+            border-right: none;
+            border-left: none;
+        }
+        input:focus{
+            outline: none !important;
         }
     }
 

@@ -4,12 +4,21 @@
     border: 2px solid rgb(114, 108, 108);
 
     .status-option-header {
+        font-size: 16px;
         display: flex;
         justify-content: space-between;
         color: #878b917c;
         text-align: left;
         margin: 0px 20px 0px 20px;
 
+        .content { 
+            margin-top: 5px;
+        }
+
+        .status-option-header-delete {
+            width: 18px;
+            height: 18px;
+        }
     }
 
     .status-option-divider {
@@ -20,6 +29,8 @@
     }
     
     .status-option-body {
+        font-size: 12px;
+        text-align: left;
         margin: auto 20px 5px 20px;
     }
 }

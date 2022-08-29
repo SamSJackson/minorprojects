@@ -16,7 +16,7 @@ app.use(parser.urlencoded({extended: true}));
 app.use(express.json());
 
 app.get('/api/statuses', (request, response) => {
-    const sqlQuery = "SELECT * FROM basic_status";
+    const sqlQuery = "SELECT * FROM basic_status ORDER BY createdAt DESC";
     db.query(sqlQuery, (error, result) => {
         if (error) {
             response.send(`error => ${error}`);
@@ -48,6 +48,19 @@ app.post('/api/statuses/add', (request, response) => {
         }
         response.send(newStatus);
     })
+})
+
+app.post('/api/statuses/delete', (request, response) => {
+    const _id = request.body.statusId;
+
+    const sqlQuery = "DELETE FROM basic_status WHERE id = (?)";
+    db.query(sqlQuery, [_id], (error, result) => {
+        if (error) {
+            console.log(error);
+            response.send(error);
+        }
+    });
+    response.send("Success");
 })
 
 

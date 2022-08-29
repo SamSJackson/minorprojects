@@ -1,7 +1,7 @@
-import React, { useState, useContext } from 'react';
+import React from 'react';
 
 import { Status } from '../../../constants/Status';
-import TimeContext from '../../../contexts/TimeContex';
+import DeleteIcon from '../../../static/svg/DeleteIcon';
 import { formatTime } from '../../../util/time';
 
 import './main.scss';
@@ -17,14 +17,21 @@ const UpdateOption: React.FC<Props> = ({
 }) => {
     const createdAt = formatTime(status.createdAt);
 
+    const handleDelete = async () => {
+        await onDelete(status._id);
+    }
+
     return (
         <div className="status-option">
             <div className="status-option-header">
-                <div>
-                    {status.author}     
+                <div className="content">
+                    {status.author}
                 </div>
-                <div>
+                <div className="content">
                     {createdAt}
+                </div>
+                <div className="content">
+                    <DeleteIcon onClick={handleDelete}/>
                 </div>
             </div>
             <hr className="status-option-divider" />
