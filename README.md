@@ -6,3 +6,4 @@ Trying to make projects and get more involved in the open source community.
 Also useful for me to better understand python.
 
 Thank you.
+Also the repo I use to test git permissions
