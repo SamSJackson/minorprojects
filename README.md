@@ -7,3 +7,4 @@ Also useful for me to better understand python.
 
 Thank you.
 Also the repo I use to test git permissions
+Desktop - Linux
